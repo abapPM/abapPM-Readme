@@ -32,7 +32,7 @@ IMPORT '*' TO '/namespace/$1$2' FROM 'xxx'.
 
 All contributions are welcome! Read our [Contribution Guidelines](CONTRIBUTING.md), fork this repo, and create a pull request.
 
-You can install the developer version of ABAP XXX using [abapGit](https://github.com/abapGit/abapGit) either by creating a new online repository for https://github.com/abapPM/ABAP-XXX.
+You can install the developer version of ABAP XXX using [abapGit](https://github.com/abapGit/abapGit) either by creating a new online repository for https://github.com/abapPM/ABAP-Readme.
 
 Recommended SAP package: `$README`.
 
