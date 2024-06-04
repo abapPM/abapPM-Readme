@@ -1,10 +1,10 @@
-![Version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/abapPM/ABAP-XXX/src/zcl_XXX.clas.abap/c_version&label=Version&color=blue)
+![Version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/abapPM/ABAP-Readme/src/zcl_XXX.clas.abap/c_version&label=Version&color=blue)
 
-[![License](https://img.shields.io/github/license/abapPM/ABAP-XXX?label=License&color=green)](LICENSE)
+[![License](https://img.shields.io/github/license/abapPM/ABAP-Readme?label=License&color=green)](LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?color=green)](https://github.com/abapPM/.github/blob/main/CODE_OF_CONDUCT.md)
-[![REUSE Status](https://api.reuse.software/badge/github.com/abapPM/ABAP-XXX)](https://api.reuse.software/info/github.com/abapPM/ABAP-XXX)
+[![REUSE Status](https://api.reuse.software/badge/github.com/abapPM/ABAP-Readme)](https://api.reuse.software/info/github.com/abapPM/ABAP-Readme)
 
-# XXX
+# Readme
 
 
 
@@ -20,7 +20,7 @@ SAP Basis 7.40 or higher
 
 ## Installation
 
-Import ABAP XXX to your project using [apm](https://abappm.com).
+Import ABAP Readme to your project using [apm](https://abappm.com).
 
 ```abap
 IMPORT '*' TO 'z$1_your_project$2' FROM 'xxx'.
@@ -34,7 +34,7 @@ All contributions are welcome! Read our [Contribution Guidelines](CONTRIBUTING.m
 
 You can install the developer version of ABAP XXX using [abapGit](https://github.com/abapGit/abapGit) either by creating a new online repository for https://github.com/abapPM/ABAP-XXX.
 
-Recommended SAP package: `$XXX`.
+Recommended SAP package: `$README`.
 
 ## About
 
