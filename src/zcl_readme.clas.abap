@@ -17,8 +17,8 @@ CLASS zcl_readme DEFINITION
 
     CLASS-METHODS factory
       IMPORTING
-        !iv_package   TYPE devclass
-        !iv_markdown  TYPE string OPTIONAL
+        !package      TYPE devclass
+        !markdown     TYPE string OPTIONAL
       RETURNING
         VALUE(result) TYPE REF TO zif_readme
       RAISING
@@ -26,25 +26,25 @@ CLASS zcl_readme DEFINITION
 
     CLASS-METHODS injector
       IMPORTING
-        !iv_package TYPE devclass
-        !ii_mock    TYPE REF TO zif_readme.
+        !package TYPE devclass
+        !mock    TYPE REF TO zif_readme.
 
     METHODS constructor
       IMPORTING
-        !iv_package  TYPE devclass
-        !iv_markdown TYPE string OPTIONAL
+        !package  TYPE devclass
+        !markdown TYPE string OPTIONAL
       RAISING
         zcx_error.
 
     CLASS-METHODS get_package_key
       IMPORTING
-        !iv_package   TYPE devclass
+        !package      TYPE devclass
       RETURNING
         VALUE(result) TYPE zif_persist_apm=>ty_key.
 
     CLASS-METHODS get_package_from_key
       IMPORTING
-        !iv_key       TYPE zif_persist_apm=>ty_key
+        !key          TYPE zif_persist_apm=>ty_key
       RETURNING
         VALUE(result) TYPE devclass.
 
@@ -59,12 +59,12 @@ CLASS zcl_readme DEFINITION
       ty_instances TYPE HASHED TABLE OF ty_instance WITH UNIQUE KEY package.
 
     CLASS-DATA:
-      gi_persist   TYPE REF TO zif_persist_apm,
-      gt_instances TYPE ty_instances.
+      db_persist TYPE REF TO zif_persist_apm,
+      instances  TYPE ty_instances.
 
     DATA:
-      mv_package TYPE devclass,
-      ms_readme  TYPE zif_readme=>ty_readme.
+      package TYPE devclass,
+      readme  TYPE zif_readme=>ty_readme.
 
 ENDCLASS.
 
@@ -74,19 +74,21 @@ CLASS zcl_readme IMPLEMENTATION.
 
 
   METHOD class_constructor.
-    gi_persist = zcl_persist_apm=>get_instance( ).
+
+    db_persist = zcl_persist_apm=>get_instance( ).
+
   ENDMETHOD.
 
 
   METHOD constructor.
 
-*    IF zcl_readme_valid=>is_valid_sap_package( iv_package ) = abap_false.
-*      zcx_error=>raise( |Invalid package: { iv_package }| ).
+*    IF zcl_readme_valid=>is_valid_sap_package( package ) = abap_false.
+*      zcx_error=>raise( |Invalid package: { package }| ).
 *    ENDIF.
 
-    mv_package         = iv_package.
-    ms_readme-key      = get_package_key( mv_package ).
-    ms_readme-markdown = iv_markdown.
+    me->package     = package.
+    readme-key      = get_package_key( package ).
+    readme-markdown = markdown.
 
     TRY.
         zif_readme~load( ).
@@ -98,22 +100,21 @@ CLASS zcl_readme IMPLEMENTATION.
 
   METHOD factory.
 
-    DATA ls_instance TYPE ty_instance.
-
-    FIELD-SYMBOLS <ls_instance> TYPE ty_instance.
-
-    READ TABLE gt_instances ASSIGNING <ls_instance> WITH TABLE KEY package = iv_package.
+    READ TABLE instances ASSIGNING FIELD-SYMBOL(<instance>)
+      WITH TABLE KEY package = package.
     IF sy-subrc = 0.
-      result = <ls_instance>-instance.
+      result = <instance>-instance.
     ELSE.
       CREATE OBJECT result TYPE zcl_readme
         EXPORTING
-          iv_package  = iv_package
-          iv_markdown = iv_markdown.
+          package  = package
+          markdown = markdown.
 
-      ls_instance-package  = iv_package.
-      ls_instance-instance = result.
-      INSERT ls_instance INTO TABLE gt_instances.
+      DATA(instance) = VALUE ty_instance(
+        package  = package
+        instance = result ).
+
+      INSERT instance INTO TABLE instances.
     ENDIF.
 
   ENDMETHOD.
@@ -121,74 +122,83 @@ CLASS zcl_readme IMPLEMENTATION.
 
   METHOD get_package_from_key.
 
-    DATA:
-      lv_prefix TYPE string,
-      lv_suffix TYPE string.
-
-    SPLIT iv_key AT ':' INTO lv_prefix result lv_suffix.
+    SPLIT key AT ':' INTO DATA(prefix) result DATA(suffix).
     result = to_upper( result ).
 
   ENDMETHOD.
 
 
   METHOD get_package_key.
-    result = |{ zif_persist_apm=>c_key_type-package }:{ iv_package }:{ zif_persist_apm=>c_key_extra-package_readme }|.
+
+    result = |{ zif_persist_apm=>c_key_type-package }:{ package }:{ zif_persist_apm=>c_key_extra-package_readme }|.
+
   ENDMETHOD.
 
 
   METHOD injector.
 
-    DATA ls_instance TYPE ty_instance.
-
-    FIELD-SYMBOLS <ls_instance> TYPE ty_instance.
-
-    READ TABLE gt_instances ASSIGNING <ls_instance> WITH TABLE KEY package = iv_package.
+    READ TABLE instances ASSIGNING FIELD-SYMBOL(<instance>)
+      WITH TABLE KEY package = package.
     IF sy-subrc = 0.
-      <ls_instance>-instance = ii_mock.
+      <instance>-instance = mock.
     ELSE.
-      ls_instance-package  = iv_package.
-      ls_instance-instance = ii_mock.
-      INSERT ls_instance INTO TABLE gt_instances.
+      DATA(instance) = VALUE ty_instance(
+        package  = package
+        instance = mock ).
+
+      INSERT instance INTO TABLE instances.
     ENDIF.
 
   ENDMETHOD.
 
 
   METHOD zif_readme~delete.
-    gi_persist->delete( ms_readme-key ).
+
+    db_persist->delete( readme-key ).
+
   ENDMETHOD.
 
 
   METHOD zif_readme~exists.
+
     TRY.
-        gi_persist->load( ms_readme-key ).
+        db_persist->load( readme-key ).
         result = abap_true.
       CATCH zcx_error.
         result = abap_false.
     ENDTRY.
+
   ENDMETHOD.
 
 
   METHOD zif_readme~get.
-    result = ms_readme-markdown.
+
+    result = readme-markdown.
+
   ENDMETHOD.
 
 
   METHOD zif_readme~load.
-    ms_readme-markdown = gi_persist->load( ms_readme-key )-value.
+
+    readme-markdown = db_persist->load( readme-key )-value.
     result = me.
+
   ENDMETHOD.
 
 
   METHOD zif_readme~save.
-    gi_persist->save(
-      iv_key   = ms_readme-key
-      iv_value = zif_readme~get( ) ).
+
+    db_persist->save(
+      key   = readme-key
+      value = zif_readme~get( ) ).
+
   ENDMETHOD.
 
 
   METHOD zif_readme~set.
-    ms_readme-markdown = iv_markdown.
+
+    readme-markdown = markdown.
     result = me.
+
   ENDMETHOD.
 ENDCLASS.
