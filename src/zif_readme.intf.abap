@@ -14,9 +14,8 @@ INTERFACE zif_readme PUBLIC.
       key      TYPE zif_persist_apm=>ty_key,
       markdown TYPE string,
       instance TYPE REF TO zif_readme,
-    END OF ty_readme.
-  TYPES:
-    ty_readmes TYPE STANDARD TABLE OF ty_readme WITH KEY key.
+    END OF ty_readme,
+    ty_readmes TYPE STANDARD TABLE OF ty_readme WITH KEY key ##NEEDED.
 
   METHODS get
     RETURNING
