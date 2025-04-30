@@ -1,21 +1,21 @@
 {
-  "name": "abappm-readme",
+  "name": "@apm/readme",
   "version": "1.0.0",
-  "description": "ABAPPM-README",
-  "type": "module",
+  "description": "Readme Manager for apm",
   "keywords": [
     "abap",
     "apm",
-    "module"
+    "module",
+    "readme"
   ],
   "homepage": "https://abappm.com",
   "bugs": {
-    "url": "https://github.com/abapPM/abapPM-Readme"
+    "url": "https://github.com/abapPM/abapPM-Readme/issues"
   },
   "license": "MIT",
   "author": {
     "name": "Marc Bernard",
-    "url": "https://abappm.com"
+    "url": "https://github.com/mbtools"
   },
   "maintainers": [
     {
@@ -24,13 +24,15 @@
     }
   ],
   "repository": {
+    "type": "https",
     "url": "https://github.com/abapPM/abapPM-Readme"
   },
   "funding": {
     "type": "github",
-    "url": "https://github.com/sponsors/abapPM"
+    "url": "https://github.com/sponsors/abappm"
   },
   "dependencies": {
+    "@apm/persist": "^1.0.0",
     "error": "^1.0.0"
   },
   "engines": {
