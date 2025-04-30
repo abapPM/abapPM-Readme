@@ -23,7 +23,7 @@ INTERFACE zif_readme PUBLIC.
 
   METHODS set
     IMPORTING
-      !markdown  TYPE string
+      !markdown     TYPE string
     RETURNING
       VALUE(result) TYPE REF TO zif_readme
     RAISING
