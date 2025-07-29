@@ -1,4 +1,4 @@
-INTERFACE zif_readme PUBLIC.
+INTERFACE /apmg/if_readme PUBLIC.
 
 
 ************************************************************************
@@ -11,9 +11,9 @@ INTERFACE zif_readme PUBLIC.
 
   TYPES:
     BEGIN OF ty_readme,
-      key      TYPE zif_persist_apm=>ty_key,
+      key      TYPE /apmg/if_persist_apm=>ty_key,
       markdown TYPE string,
-      instance TYPE REF TO zif_readme,
+      instance TYPE REF TO /apmg/if_readme,
     END OF ty_readme,
     ty_readmes TYPE STANDARD TABLE OF ty_readme WITH KEY key ##NEEDED.
 
@@ -25,9 +25,9 @@ INTERFACE zif_readme PUBLIC.
     IMPORTING
       !markdown     TYPE string
     RETURNING
-      VALUE(result) TYPE REF TO zif_readme
+      VALUE(result) TYPE REF TO /apmg/if_readme
     RAISING
-      zcx_error.
+      /apmg/cx_error.
 
   METHODS exists
     RETURNING
@@ -35,16 +35,16 @@ INTERFACE zif_readme PUBLIC.
 
   METHODS load
     RETURNING
-      VALUE(result) TYPE REF TO zif_readme
+      VALUE(result) TYPE REF TO /apmg/if_readme
     RAISING
-      zcx_error.
+      /apmg/cx_error.
 
   METHODS save
     RAISING
-      zcx_error.
+      /apmg/cx_error.
 
   METHODS delete
     RAISING
-      zcx_error.
+      /apmg/cx_error.
 
 ENDINTERFACE.

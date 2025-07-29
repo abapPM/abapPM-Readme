@@ -1,4 +1,4 @@
-CLASS zcl_readme DEFINITION
+CLASS /apmg/cl_readme DEFINITION
   PUBLIC
   FINAL
   CREATE PRIVATE.
@@ -11,7 +11,7 @@ CLASS zcl_readme DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
-    INTERFACES zif_readme.
+    INTERFACES /apmg/if_readme.
 
     CLASS-METHODS class_constructor.
 
@@ -20,31 +20,31 @@ CLASS zcl_readme DEFINITION
         !package      TYPE devclass
         !markdown     TYPE string OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zif_readme
+        VALUE(result) TYPE REF TO /apmg/if_readme
       RAISING
-        zcx_error.
+        /apmg/cx_error.
 
     CLASS-METHODS injector
       IMPORTING
         !package TYPE devclass
-        !mock    TYPE REF TO zif_readme.
+        !mock    TYPE REF TO /apmg/if_readme.
 
     METHODS constructor
       IMPORTING
         !package  TYPE devclass
         !markdown TYPE string OPTIONAL
       RAISING
-        zcx_error.
+        /apmg/cx_error.
 
     CLASS-METHODS get_package_key
       IMPORTING
         !package      TYPE devclass
       RETURNING
-        VALUE(result) TYPE zif_persist_apm=>ty_key.
+        VALUE(result) TYPE /apmg/if_persist_apm=>ty_key.
 
     CLASS-METHODS get_package_from_key
       IMPORTING
-        !key          TYPE zif_persist_apm=>ty_key
+        !key          TYPE /apmg/if_persist_apm=>ty_key
       RETURNING
         VALUE(result) TYPE devclass.
 
@@ -54,28 +54,28 @@ CLASS zcl_readme DEFINITION
     TYPES:
       BEGIN OF ty_instance,
         package  TYPE devclass,
-        instance TYPE REF TO zif_readme,
+        instance TYPE REF TO /apmg/if_readme,
       END OF ty_instance,
       ty_instances TYPE HASHED TABLE OF ty_instance WITH UNIQUE KEY package.
 
     CLASS-DATA:
-      db_persist TYPE REF TO zif_persist_apm,
+      db_persist TYPE REF TO /apmg/if_persist_apm,
       instances  TYPE ty_instances.
 
     DATA:
       package TYPE devclass,
-      readme  TYPE zif_readme=>ty_readme.
+      readme  TYPE /apmg/if_readme=>ty_readme.
 
 ENDCLASS.
 
 
 
-CLASS zcl_readme IMPLEMENTATION.
+CLASS /apmg/cl_readme IMPLEMENTATION.
 
 
   METHOD class_constructor.
 
-    db_persist = zcl_persist_apm=>get_instance( ).
+    db_persist = /apmg/cl_persist_apm=>get_instance( ).
 
   ENDMETHOD.
 
@@ -91,8 +91,8 @@ CLASS zcl_readme IMPLEMENTATION.
     readme-markdown = markdown.
 
     TRY.
-        zif_readme~load( ).
-      CATCH zcx_error ##NO_HANDLER.
+        /apmg/if_readme~load( ).
+      CATCH /apmg/cx_error ##NO_HANDLER.
     ENDTRY.
 
   ENDMETHOD.
@@ -105,7 +105,7 @@ CLASS zcl_readme IMPLEMENTATION.
     IF sy-subrc = 0.
       result = <instance>-instance.
     ELSE.
-      result = NEW zcl_readme(
+      result = NEW /apmg/cl_readme(
         package  = package
         markdown = markdown ).
 
@@ -129,8 +129,8 @@ CLASS zcl_readme IMPLEMENTATION.
 
   METHOD get_package_key.
 
-    result = |{ zif_persist_apm=>c_key_type-package }:{ package }:|
-          && |{ zif_persist_apm=>c_key_extra-package_readme }|.
+    result = |{ /apmg/if_persist_apm=>c_key_type-package }:{ package }:|
+          && |{ /apmg/if_persist_apm=>c_key_extra-package_readme }|.
 
   ENDMETHOD.
 
@@ -152,33 +152,33 @@ CLASS zcl_readme IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD zif_readme~delete.
+  METHOD /apmg/if_readme~delete.
 
     db_persist->delete( readme-key ).
 
   ENDMETHOD.
 
 
-  METHOD zif_readme~exists.
+  METHOD /apmg/if_readme~exists.
 
     TRY.
         db_persist->load( readme-key ).
         result = abap_true.
-      CATCH zcx_error.
+      CATCH /apmg/cx_error.
         result = abap_false.
     ENDTRY.
 
   ENDMETHOD.
 
 
-  METHOD zif_readme~get.
+  METHOD /apmg/if_readme~get.
 
     result = readme-markdown.
 
   ENDMETHOD.
 
 
-  METHOD zif_readme~load.
+  METHOD /apmg/if_readme~load.
 
     readme-markdown = db_persist->load( readme-key )-value.
     result = me.
@@ -186,16 +186,16 @@ CLASS zcl_readme IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD zif_readme~save.
+  METHOD /apmg/if_readme~save.
 
     db_persist->save(
       key   = readme-key
-      value = zif_readme~get( ) ).
+      value = /apmg/if_readme~get( ) ).
 
   ENDMETHOD.
 
 
-  METHOD zif_readme~set.
+  METHOD /apmg/if_readme~set.
 
     readme-markdown = markdown.
     result = me.

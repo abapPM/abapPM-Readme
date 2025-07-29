@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_README</CLSNAME>
+    <CLSNAME>/APMG/CL_README</CLSNAME>
     <LANGU>E</LANGU>
     <DESCRIPT>Readme</DESCRIPT>
     <STATE>1</STATE>
