@@ -2,6 +2,7 @@
   "name": "@apm/readme",
   "version": "1.0.0",
   "description": "Readme Manager for apm",
+  "type": "module",
   "keywords": [
     "abap",
     "apm",
