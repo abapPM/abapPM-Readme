@@ -36,6 +36,12 @@ CLASS /apmg/cl_readme DEFINITION
       RAISING
         /apmg/cx_error.
 
+    CLASS-METHODS is_package_key
+      IMPORTING
+        !value        TYPE csequence
+      RETURNING
+        VALUE(result) TYPE abap_bool.
+
     CLASS-METHODS get_package_key
       IMPORTING
         !package      TYPE devclass
@@ -204,6 +210,14 @@ CLASS /apmg/cl_readme IMPLEMENTATION.
 
       INSERT instance INTO TABLE instances.
     ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD is_package_key.
+
+    result = xsdbool( value CP |{ /apmg/if_persist_apm=>c_key_type-package }:*:|
+                            && |{ /apmg/if_persist_apm=>c_key_extra-package_readme }| ).
 
   ENDMETHOD.
 ENDCLASS.
